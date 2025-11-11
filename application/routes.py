@@ -28,31 +28,23 @@ def index():
     return render_template('index.html', livros=livros, alunos=alunos, emprestimos=emprestimos)
 
 #aluno
-@bp.route('/alunos')
-def alunos():
-    alunos = database.get_alunos()
-    return render_template('alunos.html', alunos=alunos)
-
-@bp.route('/post_aluno', methods=['POST']) # type: ignore
-def post_aluno():
-    nome = request.form.get('nome')
-    matricula = request.form.get('matricula')
-    turma =request.form.get('turma').split('-') # type: ignore
-    turma = f"{turma[0]}º Ano{turma[1].upper()}"
-    email = request.form.get('email')
-    telefona = request.form.get('telefone')
-    data = request.form.get('data')
-    acao = request.form.get('acao')
-    if acao == 'inserir':
-        database.inserir_aluno(nome, matricula, turma, email, telefona, data)
-        return  redirect('/alunos')
-    elif acao == 'filtrar':
-        return  redirect('/alunos')
+@bp.route('/aluno')
+def aluno():
+    return render_template('alunos.html')
+@bp.route('/aluno/listar', methods=['GET'])
+def listar_alunos():
+    alunos = database.listar_alunos()
+    return jsonify(alunos)
+    
+@bp.route('/aluno/cadastrar', methods=['POST']) # type: ignore
+def cadastrar_aluno():
+    aluno = request.get_json()
+    database.cadastrar_aluno(aluno)
+    return jsonify({'mensagem': 'Aluno cadastrado com sucesso!'})
 
 @bp.route('/atualizar_aluno', methods=['POST'])
 def atualizar_aluno():
     dados = request.get_json()
-
     matricula = dados['matricula']
     nome = dados['nome']
     turma = dados['turma']
@@ -78,8 +70,8 @@ def deletar_aluno():
 #Emprestimo
 @bp.route('/emprestimos')
 def emprestimos():
-    alunos = database.get_alunos()
-    livros = database.get_livros()
+    alunos = database.listar_alunos()
+    livros = database.listar_livros()
     emprestimos = database.get_emprestimos()
 
     return render_template('emprestimos.html', emprestimos=emprestimos,livros=livros, alunos=alunos)
@@ -104,7 +96,7 @@ def devolver_livro(id):
 #livro
 @bp.route('/livros')
 def livros():
-    livros = database.get_livros()
+    livros = database.listar_livros()
     return render_template('livros.html', livros=livros)
 
 @bp.route('/post_livro', methods=['POST'])

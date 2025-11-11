@@ -1,3 +1,42 @@
+async function cadastrarAluno(){
+  
+  const  aluno = {
+    nome: document.getElementsByName("nome")[0].value,
+    matricula: document.getElementsByName("matricula")[0].value,
+    turma: document.getElementsByName("turma")[0].value,
+    email: document.getElementsByName("email")[0].value,
+    telefone: document.getElementsByName("telefone")[0].value,
+    dataNascimento: document.getElementsByName("dataN")[0].value
+  }
+
+  aluno.matricula = Math.floor(100000 + Math.random() * 900000);
+  const [num1, num2, num3] = aluno.dataNascimento.split('-');
+  aluno.dataNascimento = `${num1}/${num2}/${num3}`;
+  const [numero, letra] = aluno.turma.split('-');
+  aluno.turma = `${numero}º Ano ${letra.toUpperCase()}`;
+
+  console.log(aluno);
+  alert("Dados salvos (simulação).");
+
+  try{
+    const resposta = await fetch('/aluno/cadastrar',{
+      method: 'POST',
+      headers: { 'content-type': 'application/json'},
+      body: JSON.stringify(aluno)
+    });
+    const resultado = await resposta.json();
+    alert(resultado.mensagem);
+
+    }catch(erro){
+      console.error('Erro ao cadastrar:', erro);
+      alert('Erro ao cadastrar o aluno.');
+    }
+  }
+
+async function listarAlunos(){
+  
+}
+
 function abrirModal(matricula, nome, turma, email, telefone) {
     document.getElementById("matricula").value = matricula;
     document.getElementById("nome").value = nome;
