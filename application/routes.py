@@ -70,8 +70,8 @@ def deletar_aluno():
 #Emprestimo
 @bp.route('/emprestimos')
 def emprestimos():
-    alunos = database.get_alunos()
-    livros = database.get_livros()
+    alunos = database.listar_alunos()
+    livros = database.listar_livros()
     emprestimos = database.get_emprestimos()
 
     return render_template('emprestimos.html', emprestimos=emprestimos,livros=livros, alunos=alunos)
@@ -96,7 +96,7 @@ def devolver_livro(id):
 #livro
 @bp.route('/livros')
 def livros():
-    livros = database.get_livros()
+    livros = database.listar_livros()
     return render_template('livros.html', livros=livros)
 
 @bp.route('/post_livro', methods=['POST'])

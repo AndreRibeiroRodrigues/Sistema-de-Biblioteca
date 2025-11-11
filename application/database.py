@@ -72,7 +72,7 @@ def atualizarAluno(matricula, nome, turma, email, telefone):
     conn.close()
 
 #livros
-def get_livros():
+def listar_livros():
     conn = get_connection()
     cursor = conn.cursor()
     cursor.execute('SELECT * FROM LIVROS')
