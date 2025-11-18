@@ -30,16 +30,18 @@ def index():
 #aluno
 @bp.route('/aluno')
 def aluno():
-    return render_template('alunos.html')
+    alunos = database.listar_alunos_mongo()
+    return render_template('alunos.html', aluno=alunos)
+
 @bp.route('/aluno/listar', methods=['GET'])
 def listar_alunos():
-    alunos = database.listar_alunos()
+    alunos = database.listar_alunos_mongo()
     return jsonify(alunos)
     
 @bp.route('/aluno/cadastrar', methods=['POST']) # type: ignore
 def cadastrar_aluno():
     aluno = request.get_json()
-    database.cadastrar_aluno(aluno)
+    database.cadastrar_aluno_mongo(aluno)
     return jsonify({'mensagem': 'Aluno cadastrado com sucesso!'})
 
 @bp.route('/atualizar_aluno', methods=['POST'])
@@ -66,33 +68,6 @@ def deletar_aluno():
     conn.close()
     return jsonify({'mensagem': 'Aluno deletado com sucesso!'})
 
-
-#Emprestimo
-@bp.route('/emprestimos')
-def emprestimos():
-    alunos = database.listar_alunos()
-    livros = database.listar_livros()
-    emprestimos = database.get_emprestimos()
-
-    return render_template('emprestimos.html', emprestimos=emprestimos,livros=livros, alunos=alunos)
-
-@bp.route('/emprestimos/adicionar', methods=['POST'])
-def post_emprestimo():
-    matricula = request.form.get('aluno')
-    idlivro = request.form.get('livro')
-    dataEmprestimo = request.form.get('dataEmprestimo')
-    dataDevolucao = request.form.get('dataDevolucao')
-    acao = request.form.get('acao')
-    if acao == 'inserir':
-        database.inserir_emprestimo(matricula, idlivro)
-        return redirect('/emprestimos')
-    else:
-        return redirect('/emprestimos')
-
-@bp.route('/emprestimos/devolver/<int:id>', methods=['PUT'])
-def devolver_livro(id):
-    database.devolver_livro(id)
-    return jsonify({"message": "Livro devolvido com sucesso!"})
 #livro
 @bp.route('/livros')
 def livros():
@@ -128,6 +103,33 @@ def excluir_livro(id):
     conn.commit()
     conn.close()
     return jsonify({"message": "Livro excluído com sucesso!"})
+
+#Emprestimo
+@bp.route('/emprestimos')
+def emprestimos():
+    alunos = database.listar_alunos()
+    livros = database.listar_livros()
+    emprestimos = database.get_emprestimos()
+
+    return render_template('emprestimos.html', emprestimos=emprestimos,livros=livros, alunos=alunos)
+
+@bp.route('/emprestimos/adicionar', methods=['POST'])
+def post_emprestimo():
+    matricula = request.form.get('aluno')
+    idlivro = request.form.get('livro')
+    dataEmprestimo = request.form.get('dataEmprestimo')
+    dataDevolucao = request.form.get('dataDevolucao')
+    acao = request.form.get('acao')
+    if acao == 'inserir':
+        database.inserir_emprestimo(matricula, idlivro)
+        return redirect('/emprestimos')
+    else:
+        return redirect('/emprestimos')
+
+@bp.route('/emprestimos/devolver/<int:id>', methods=['PUT'])
+def devolver_livro(id):
+    database.devolver_livro(id)
+    return jsonify({"message": "Livro devolvido com sucesso!"})
 
 
 

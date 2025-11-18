@@ -15,9 +15,6 @@ async function cadastrarAluno(){
   const [numero, letra] = aluno.turma.split('-');
   aluno.turma = `${numero}º Ano ${letra.toUpperCase()}`;
 
-  console.log(aluno);
-  alert("Dados salvos (simulação).");
-
   try{
     const resposta = await fetch('/aluno/cadastrar',{
       method: 'POST',

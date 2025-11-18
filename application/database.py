@@ -1,6 +1,8 @@
 import sqlite3
 import os
 import datetime
+from pymongo import MongoClient
+from bson import ObjectId
 
 
 def get_connection():
@@ -142,3 +144,204 @@ def inserir_emprestimo(matricula, idlivro):
     conn.commit()
     conn.close()
 
+#Mongodb
+aluno_validator = {
+    "validator" :{
+        "$jsonSchema": {
+            "bsonType": "object",
+            "title": "Aluno Document Validation",
+            "required": [
+                "MATRICULA",
+                "NOME",
+                "TURMA",
+                "EMAIL",
+                "TELEFONE",
+                "DATANASCIMENTO"
+            ],
+            "properties": {
+                "MATRICULA": {
+                    "bsonType": "int",
+                    "minimum": 1,
+                    "description": "'MATRICULA' deve ser um inteiro positivo e é obrigatória"
+                },
+                "NOME": {
+                    "bsonType": "string",
+                    "description": "'NOME' deve ser string e é obrigatório"
+                },
+                "TURMA": {
+                    "bsonType": "string",
+                    "description": "'TURMA' deve ser string e é obrigatório"
+                },
+                "EMAIL": {
+                    "bsonType": "string",
+                    "pattern": "^.+@.+$",
+                    "description": "'EMAIL' deve ser um e-mail válido e é obrigatório"
+                },
+                "TELEFONE": {
+                    "bsonType": "string",
+                    "description": "'TELEFONE' deve ser string e é obrigatório"
+                },
+                "DATANASCIMENTO": {
+                    "bsonType": "date",
+                    "description": "'DATANASCIMENTO' deve ser uma data (MongoDB Date) e é obrigatório"
+                }
+            }
+        }
+    }
+}
+livro_validator = {
+    "validator" :{
+        "$jsonSchema": {
+            "bsonType": "object",
+            "title": "Livro Document Validation",
+            "required": [
+                "ID",
+                "TITULO",
+                "AUTOR",
+                "ISBN",
+                "CATEGORIA",
+                "ANO"
+            ],
+            "properties": {
+                "ID": {
+                    "bsonType": "int",
+                    "minimum": 1,
+                    "description": "'ID' deve ser um inteiro positivo e é obrigatório"
+                },
+                "TITULO": {
+                    "bsonType": "string",
+                    "description": "'TITULO' deve ser string e é obrigatório"
+                },
+                "AUTOR": {
+                    "bsonType": "string",
+                    "description": "'AUTOR' deve ser string e é obrigatório"
+                },
+                "ISBN": {
+                    "bsonType": "string",
+                    "description": "'ISBN' deve ser string e é obrigatório"
+                },
+                "CATEGORIA": {
+                    "bsonType": "string",
+                    "description": "'CATEGORIA' deve ser string e é obrigatório"
+                },
+                "ANO": {
+                    "bsonType": "int",
+                    "minimum": 0,
+                    "description": "'ANO' deve ser inteiro não negativo e é obrigatório"
+                }
+            }
+        }
+    }
+}
+emprestimo_validator = {
+    "validator" :{
+        "$jsonSchema": {
+            "bsonType": "object",
+            "title": "Emprestimo Document Validation",
+            "required": [
+                "ID",
+                "ID_ALUNO",
+                "ID_LIVRO",
+                "DATAEMPRESTIMO"
+            ],
+            "properties": {
+                "ID": {
+                    "bsonType": "int",
+                    "minimum": 1,
+                    "description": "'ID' deve ser um inteiro positivo e é obrigatório"
+                },
+                "ID_ALUNO": {
+                    "bsonType": "int",
+                    "minimum": 1,
+                    "description": "'ID_ALUNO' deve ser inteiro positivo e é obrigatório (ref. ALUNOS.MATRICULA)"
+                },
+                "ID_LIVRO": {
+                    "bsonType": "int",
+                    "minimum": 1,
+                    "description": "'ID_LIVRO' deve ser inteiro positivo e é obrigatório (ref. LIVROS.ID)"
+                },
+                "DATAEMPRESTIMO": {
+                    "bsonType": "date",
+                    "description": "'DATAEMPRESTIMO' deve ser uma data (MongoDB Date) e é obrigatória"
+                },
+                "DATADEVOLUCAO": {
+                    "bsonType": ["date", "null"],
+                    "description": "'DATADEVOLUCAO' pode ser data ou null"
+                },
+                "STATUS": {
+                    "bsonType": ["string", "null"],
+                    "description": "'STATUS' é opcional; se existir deve ser string"
+                }
+            }
+        }
+    }
+}
+
+
+def get_mongo_connection():
+    uri = "mongodb+srv://gamesandre77_db_user:Um.emel2@rayjirmongodb.k4qsfcn.mongodb.net/?appName=RayjirMongodb"
+    client = MongoClient(uri)
+    db = client['biblioteca']
+    print('conectado')
+    return db
+
+mongo_conn = get_mongo_connection()
+
+def init_mongodb():
+    
+    if 'aluno' not in mongo_conn.list_collection_names():
+        mongo_conn.create_collection(
+            'aluno',
+            validator=aluno_validator
+        )
+    if 'livro' not in mongo_conn._list_collection_names():
+        mongo_conn.create_collection(
+            'livro',
+            validator=livro_validator
+        )
+    if 'emprestimo' not in mongo_conn.list_collection_names():
+        mongo_conn.create_collection(
+            'emprestimo',
+            validator=emprestimo_validator
+        )
+
+# def inserir_dados_mongo():
+#     #função que insere dados de teste no banco de dados
+#     return
+
+# #alunos
+def listar_alunos_mongo():
+    alunos = list(mongo_conn.aluno.find({}))
+
+    # converter ObjectId para string
+    for aluno in alunos:
+        aluno["_id"] = str(aluno["_id"])
+
+    return alunos
+
+def cadastrar_aluno_mongo(aluno):
+    mongo_conn.aluno.insert_one(aluno)
+    
+
+# def atualizarAluno(matricula, nome, turma, email, telefone):
+#     return
+
+# #livros
+# def listar_livros():
+#     return
+
+# def add_livro(titulo, autor, isbn, categoria, ano):
+#     return
+
+# def atualizar_livro(id, titulo, autor, isbn, categoria, ano):
+#     return
+# #emprestimos
+# def get_emprestimos():
+#     return
+
+# def devolver_livro(id):
+#     return
+
+
+# def inserir_emprestimo(matricula, idlivro):
+#     return

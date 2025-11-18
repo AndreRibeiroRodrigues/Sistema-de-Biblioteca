@@ -4,3 +4,7 @@ source /home/user/Trabalho-banco-de-dados/venv/bin/activate
 python3  run.py
 
 /home/user/Trabalho-banco-de-dados/application/static/js/sc_alunos.js
+
+45.167.16.194
+gamesandre77_db_user
+Um.emel2
