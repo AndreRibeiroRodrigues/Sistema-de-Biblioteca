@@ -30,8 +30,94 @@ async function cadastrarAluno(){
     }
   }
 
-async function listarAlunos(){
-  
+  document.addEventListener('DOMContentLoaded', () => {
+    carregarAlunos();
+});
+
+async function carregarAlunos() {
+    const tbody = document.querySelector('#tabelaAlunos tbody');
+    tbody.innerHTML = ''; // limpa qualquer coisa anterior
+
+    try {
+        // Ajuste a URL para o endpoint correto da sua API Flask
+        const resposta = await fetch('/aluno/listar');
+
+        if (!resposta.ok) {
+            throw new Error('Erro ao buscar alunos: ' + resposta.status);
+        }
+
+        const dados = await resposta.json();
+
+        // Se sua API retornar { alunos: [...] } use isso:
+        const alunos = Array.isArray(dados) ? dados : dados.alunos;
+
+        alunos.forEach(aluno => {
+            const tr = document.createElement('tr');
+
+            // Cria as células
+            const tdMatricula = document.createElement('td');
+            tdMatricula.textContent = aluno.matricula;
+
+            const tdNome = document.createElement('td');
+            tdNome.textContent = aluno.nome;
+
+            const tdTurma = document.createElement('td');
+            tdTurma.textContent = aluno.turma;
+
+            const tdEmail = document.createElement('td');
+            tdEmail.textContent = aluno.email;
+
+            const tdTelefone = document.createElement('td');
+            tdTelefone.textContent = aluno.telefone;
+
+            const tdAcoes = document.createElement('td');
+
+            // Botão Editar
+            const btnEditar = document.createElement('button');
+            btnEditar.classList.add('action-btn');
+            btnEditar.textContent = '✏️ Editar';
+            btnEditar.addEventListener('click', () => {
+                abrirModal(
+                    aluno.matricula,
+                    aluno.nome,
+                    aluno.turma,
+                    aluno.email,
+                    aluno.telefone
+                );
+            });
+
+            // Botão Deletar
+            const btnDeletar = document.createElement('button');
+            btnDeletar.classList.add('action-btn');
+            btnDeletar.textContent = '🗑️ Deletar';
+            btnDeletar.addEventListener('click', () => {
+                deletarAluno(aluno.matricula);
+            });
+
+            tdAcoes.appendChild(btnEditar);
+            tdAcoes.appendChild(btnDeletar);
+
+            // Monta a linha
+            tr.appendChild(tdMatricula);
+            tr.appendChild(tdNome);
+            tr.appendChild(tdTurma);
+            tr.appendChild(tdEmail);
+            tr.appendChild(tdTelefone);
+            tr.appendChild(tdAcoes);
+
+            // Adiciona ao tbody
+            tbody.appendChild(tr);
+        });
+
+    } catch (erro) {
+        console.error(erro);
+        // Se quiser, você pode mostrar uma mensagem na tela:
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="6">Erro ao carregar alunos.</td>
+            </tr>
+        `;
+    }
 }
 
 function abrirModal(matricula, nome, turma, email, telefone) {
@@ -81,7 +167,7 @@ function fecharModal() {
     };
 
     try {
-      const resposta = await fetch('/atualizar_aluno', {
+      const resposta = await fetch('/aluno/atualizar', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(aluno)

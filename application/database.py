@@ -310,7 +310,7 @@ def init_mongodb():
 #     return
 
 # #alunos
-def listar_alunos_mongo():
+def alunoListarMongo():
     alunos = list(mongo_conn.aluno.find({}))
 
     # converter ObjectId para string
@@ -319,19 +319,26 @@ def listar_alunos_mongo():
 
     return alunos
 
-def cadastrar_aluno_mongo(aluno):
+def alunoCadastrarMongo(aluno):
     mongo_conn.aluno.insert_one(aluno)
     
 
-# def atualizarAluno(matricula, nome, turma, email, telefone):
-#     return
+def alunoAtualizarMongo(dado):
+    return
 
 # #livros
 # def listar_livros():
 #     return
 
-# def add_livro(titulo, autor, isbn, categoria, ano):
-#     return
+def livroAdicionarMongo(titulo, autor, isbn, categoria, ano):
+    livro = {
+        'titulo': titulo,
+        'autor': autor,
+        'isbn': isbn,
+        'categoria': categoria,
+        'ano': ano
+    }
+    mongo_conn.livro.insert_one(livro) 
 
 # def atualizar_livro(id, titulo, autor, isbn, categoria, ano):
 #     return

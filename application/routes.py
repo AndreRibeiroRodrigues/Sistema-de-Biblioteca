@@ -30,34 +30,28 @@ def index():
 #aluno
 @bp.route('/aluno')
 def aluno():
-    alunos = database.listar_alunos_mongo()
-    return render_template('alunos.html', aluno=alunos)
+    return render_template('alunos.html')
 
 @bp.route('/aluno/listar', methods=['GET'])
 def listar_alunos():
-    alunos = database.listar_alunos_mongo()
+    alunos = database.alunoListarMongo()
     return jsonify(alunos)
     
 @bp.route('/aluno/cadastrar', methods=['POST']) # type: ignore
 def cadastrar_aluno():
     aluno = request.get_json()
-    database.cadastrar_aluno_mongo(aluno)
+    database.alunoCadastrarMongo(aluno)
     return jsonify({'mensagem': 'Aluno cadastrado com sucesso!'})
 
-@bp.route('/atualizar_aluno', methods=['POST'])
+@bp.route('/aluno/atualizar', methods=['POST'])
 def atualizar_aluno():
     dados = request.get_json()
-    matricula = dados['matricula']
-    nome = dados['nome']
-    turma = dados['turma']
-    email = dados['email']
-    telefone = dados['telefone']
-    database.atualizarAluno(matricula, nome, turma, email, telefone)
+    database.atualizarAluno(dados)
     
 
     return jsonify({'mensagem': 'Aluno atualizado com sucesso!'})
 
-@bp.route('/deletar_aluno', methods=['POST'])
+@bp.route('/aluno/deletar', methods=['POST'])
 def deletar_aluno():
     dados = request.get_json()
     matricula = dados['matricula']
@@ -74,14 +68,14 @@ def livros():
     livros = database.listar_livros()
     return render_template('livros.html', livros=livros)
 
-@bp.route('/post_livro', methods=['POST'])
+@bp.route('/livro/adicionar', methods=['POST'])
 def adicionar_livro():
     titulo = request.form.get('titulo')
     autor = request.form.get('autor')
     isbn = request.form.get('isbn')
     categoria = request.form.get('categoria')
     ano = request.form.get('ano')
-    database.add_livro(titulo, autor, isbn, categoria, ano)
+    database.livroAdicionarMongo(titulo, autor, isbn, categoria, ano)
     return redirect('/livros')
 
 @bp.route('/livros/editar/<int:id>', methods=['PUT'])
@@ -107,7 +101,7 @@ def excluir_livro(id):
 #Emprestimo
 @bp.route('/emprestimos')
 def emprestimos():
-    alunos = database.listar_alunos()
+    alunos = database.alunoListarMongo()
     livros = database.listar_livros()
     emprestimos = database.get_emprestimos()
 
