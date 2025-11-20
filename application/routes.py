@@ -46,7 +46,7 @@ def cadastrar_aluno():
 @bp.route('/aluno/atualizar', methods=['POST'])
 def atualizar_aluno():
     dados = request.get_json()
-    database.atualizarAluno(dados)
+    database.alunoAtualizarMongo(dados)
     
 
     return jsonify({'mensagem': 'Aluno atualizado com sucesso!'})
@@ -68,6 +68,11 @@ def livros():
     livros = database.livroListarMongo()
     return render_template('livros.html', livros=livros)
 
+@bp.route('/livros/listar')
+def listar_livros():
+    livros = database.livroListarMongo()
+    return jsonify(livros)
+
 @bp.route('/livro/adicionar', methods=['POST'])
 def adicionar_livro():
     titulo = request.form.get('titulo')
@@ -78,19 +83,15 @@ def adicionar_livro():
     database.livroAdicionarMongo(titulo, autor, isbn, categoria, ano)
     return redirect('/livros')
 
-@bp.route('/livros/editar/<int:id>', methods=['PUT'])
-def editar_livro(id):
+@bp.route('/livros/editar', methods=['PUT'])
+def editar_livro():
     alteracao = request.get_json()
     database.livroAtualizarMongo(alteracao)
     return jsonify({"message": "Livro atualizado com sucesso!"})
 
-@bp.route('/livros/excluir/<int:id>', methods=['DELETE'])
+@bp.route('/livros/excluir/<string:id>', methods=['DELETE'])
 def excluir_livro(id):
-    conn = database.get_connection()
-    cursor = conn.cursor()
-    cursor.execute("DELETE FROM LIVROS WHERE ID = ?", (id,))
-    conn.commit()
-    conn.close()
+    database.livroDelertarMongo(id)
     return jsonify({"message": "Livro excluído com sucesso!"})
 
 #Emprestimo
@@ -106,9 +107,6 @@ def emprestimos():
 def post_emprestimo():
     matricula = request.form.get('aluno')
     idlivro = request.form.get('livro')
-    dataEmprestimo = request.form.get('dataEmprestimo')
-    dataDevolucao = request.form.get('dataDevolucao')
-    acao = request.form.get('acao')
     database.emprestimoAdicionarMongo(matricula, idlivro)
     return redirect('/emprestimos')
 

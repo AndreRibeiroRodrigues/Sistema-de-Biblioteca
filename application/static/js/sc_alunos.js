@@ -78,6 +78,7 @@ async function carregarAlunos() {
             btnEditar.textContent = '✏️ Editar';
             btnEditar.addEventListener('click', () => {
                 abrirModal(
+                    aluno._id,
                     aluno.matricula,
                     aluno.nome,
                     aluno.turma,
@@ -120,7 +121,8 @@ async function carregarAlunos() {
     }
 }
 
-function abrirModal(matricula, nome, turma, email, telefone) {
+function abrirModal(id,matricula, nome, turma, email, telefone) {
+    document.getElementById('id').value = id;
     document.getElementById("matricula").value = matricula;
     document.getElementById("nome").value = nome;
     document.getElementById("modal-turma").value = turma;
@@ -138,6 +140,7 @@ function fecharModal() {
   // Salva (exemplo)
   function salvarAluno() {
     const aluno = {
+      _id: document.getElementById("id").value,
       matricula: document.getElementById("matricula").value,
       nome: document.getElementById("nome").value,
       turma: document.getElementById("modal-turma").value,
@@ -159,6 +162,7 @@ function fecharModal() {
   }
   async function salvarAluno() {
     const aluno = {
+      _id: document.getElementById("id").value,
       matricula: document.getElementById("matricula").value,
       nome: document.getElementById("nome").value,
       turma: document.getElementById("modal-turma").value,

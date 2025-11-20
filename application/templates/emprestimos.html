@@ -42,7 +42,7 @@
                     <select name="livro">
                         <option value="">Selecione um livro</option>
                         {%for livro in livros%}
-                        <option value="{{livro.id}}">{{livro.titulo}}</option>
+                        <option value="{{livro._id}}">{{livro.titulo}}</option>
                         {%endfor%}
                     </select>
                 </div>
@@ -51,7 +51,6 @@
                 <button class="btn" type="submit" name="acao" value="inserir"> Registrar Empréstimo</button>
             </div>
         </form>
-
         <div class="table-container">
             <table id="tabelaEmprestimos">
                 <thead>

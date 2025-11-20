@@ -64,7 +64,6 @@
         <table id="tabelaLivros">
             <thead>
             <tr>
-                <th>ID</th>
                 <th>Título</th>
                 <th>Autor</th>
                 <th>ISBN</th>
@@ -76,7 +75,7 @@
             <tbody>
                 {%for livro in livros%}
                 <tr id="livro-{{livro.id}}">
-                    <td>{{livro.id}}</td>
+                    
                     <td>{{livro.titulo}}</td>
                     <td>{{livro.autor}}</td>
                     <td>{{livro.isbn}}</td>
@@ -112,7 +111,7 @@
     <h2>Editar Livro</h2>
 
     <form id="formEditarLivro">
-      <input type="hidden" id="edit-id">
+      <input type="text" id="edit-id" readonly>
 
       <label for="edit-titulo">Título:</label>
       <input type="text" id="edit-titulo" required>

@@ -86,27 +86,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {%for aluno in alunos%}
-                        <tr>
-                            <td>{{aluno.matricula}}</td>
-                            <td>{{aluno.nome}}</td>
-                            <td>{{aluno.turma}}</td>
-                            <td>{{aluno.email}}</td>
-                            <td>{{aluno.telefone}}</td>
-                            <td>
-                                <button class="action-btn" onclick="abrirModal(
-                                    '{{ aluno.matricula }}',
-                                    '{{ aluno.nome }}',
-                                    '{{ aluno.turma }}',
-                                    '{{ aluno.email }}',
-                                    '{{ aluno.telefone }}',
-                                  )">✏️ Editar</button>
-                            <button class="action-btn" onclick="deletarAluno('{{aluno.matricula}}')">🗑️ Deletar</button>
-                            <!-- <button class="action-btn" onclick="verHistorico(1)">📋 Histórico</button> -->
-                            </td>
-                        </tr>
-                    {%endfor%}
-                    
+                               
                 </tbody>
             </table>
         </div>
@@ -122,6 +102,9 @@
           <h2>Editar Aluno</h2>
       
           <form id="formAluno">
+
+            <input type="text" id="id" name="id" readonly>
+
             <label for="matricula">Matrícula:</label>
             <input type="text" id="matricula" name="matricula" readonly>
       

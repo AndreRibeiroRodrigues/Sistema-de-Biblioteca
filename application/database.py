@@ -314,7 +314,16 @@ def alunoCadastrarMongo(aluno):
     
 
 def alunoAtualizarMongo(dado):
-    mogno_conn.livro.update_one(dado["id"],dado)
+
+    mongo_conn.aluno.update_one(
+        {"_id": ObjectId(dado['_id'])},
+        {"$set": {
+            "matricula": dado["matricula"],
+            "nome": dado["nome"],
+            "turma": dado["turma"],
+            "email": dado["email"],
+            "telefone": dado["telefone"]
+        }})
 
 #livros
 def livroListarMongo():
@@ -338,13 +347,23 @@ def livroAdicionarMongo(titulo, autor, isbn, categoria, ano):
     mongo_conn.livro.insert_one(livro) 
 
 def livroAtualizarMongo(dados):
-    mongo_conn.livro.update_one(dados["id"], dados)
+    mongo_conn.livro.update_one(
+        {"_id": ObjectId(dados["_id"])},
+        {"$set":{
+            "titulo": dados["titulo"],
+            "autor": dados["autor"],
+            "isbn": dados["isbn"],
+            "categoria": dados["categoria"],
+            "ano": dados["ano"]
+        }})
+def livroDelertarMongo(id):
+    mongo_conn.livro.delete_one({"_id": ObjectId(id)})
 
 # #emprestimos
-# def get_emprestimos():
+# def emprestimoListarMongo():
 #     return
 
-# def devolver_livro(id):
+# def emprestimoDevolverLivro(id):
 #     return
 
 

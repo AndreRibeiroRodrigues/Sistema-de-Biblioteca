@@ -1,11 +1,10 @@
-function editarLivro(id,matricula, titulo, autor, isbn, categoria, ano) {
+function editarLivro(id,titulo, autor, isbn, categoria, ano) {
   document.getElementById("edit-id").value = id;
   document.getElementById("edit-titulo").value = titulo;
   document.getElementById("edit-autor").value = autor;
   document.getElementById("edit-isbn").value = isbn;
   document.getElementById("edit-categoria").value = categoria;
   document.getElementById("edit-ano").value = ano;
-//   document.getElementById("edit-status").value = status;
 
   document.getElementById("livroModal").style.display = "block";
 }
@@ -24,7 +23,7 @@ window.onclick = function(event) {
 
 async function salvarEdicao() {
   const livro = {
-    id: document.getElementById("edit-id").value,
+    _id: document.getElementById("edit-id").value,
     titulo: document.getElementById("edit-titulo").value,
     autor: document.getElementById("edit-autor").value,
     isbn: document.getElementById("edit-isbn").value,
@@ -32,7 +31,7 @@ async function salvarEdicao() {
     ano: document.getElementById("edit-ano").value,
   };
 
-  const response = await fetch(`/livros/editar/${livro.id}`, {
+  const response = await fetch(`/livros/editar`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(livro)
@@ -41,7 +40,8 @@ async function salvarEdicao() {
   const result = await response.json();
   if (response.ok) {
     alert(result.message);
-    atualizarLinhaTabela(livro);
+    location.reload();
+    // atualizarLinhaTabela(livro);
     fecharModal();
   } else {
     alert("Erro ao editar livro!");
@@ -50,7 +50,7 @@ async function salvarEdicao() {
 
 // Atualiza visualmente a tabela
 function atualizarLinhaTabela(livro) {
-  const linha = document.querySelector(`#livro-${livro.id}`);
+  const linha = document.querySelector(`#livro-${livro._id}`);
   if (!linha) return;
 
   linha.cells[1].textContent = livro.titulo;
@@ -70,6 +70,7 @@ async function excluirLivro(id) {
     const result = await response.json();
     if (response.ok) {
         alert(result.message);
+        location.reload();
         document.querySelector(`#livro-${id}`).remove();
     } else {
         alert("Erro ao excluir livro!");
