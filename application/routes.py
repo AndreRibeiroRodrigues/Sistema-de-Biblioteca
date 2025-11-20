@@ -65,7 +65,7 @@ def deletar_aluno():
 #livro
 @bp.route('/livros')
 def livros():
-    livros = database.listar_livros()
+    livros = database.livroListarMongo()
     return render_template('livros.html', livros=livros)
 
 @bp.route('/livro/adicionar', methods=['POST'])
@@ -80,13 +80,8 @@ def adicionar_livro():
 
 @bp.route('/livros/editar/<int:id>', methods=['PUT'])
 def editar_livro(id):
-    dados = request.get_json()
-    titulo = dados['titulo']
-    autor = dados['autor']
-    isbn = dados['isbn']
-    categoria = dados['categoria']
-    ano = dados['ano']
-    database.atualizar_livro(id, titulo, autor, isbn, categoria, ano)
+    alteracao = request.get_json()
+    database.livroAtualizarMongo(alteracao)
     return jsonify({"message": "Livro atualizado com sucesso!"})
 
 @bp.route('/livros/excluir/<int:id>', methods=['DELETE'])
@@ -102,7 +97,7 @@ def excluir_livro(id):
 @bp.route('/emprestimos')
 def emprestimos():
     alunos = database.alunoListarMongo()
-    livros = database.listar_livros()
+    livros = database.livroListarMongo()
     emprestimos = database.get_emprestimos()
 
     return render_template('emprestimos.html', emprestimos=emprestimos,livros=livros, alunos=alunos)
@@ -114,11 +109,8 @@ def post_emprestimo():
     dataEmprestimo = request.form.get('dataEmprestimo')
     dataDevolucao = request.form.get('dataDevolucao')
     acao = request.form.get('acao')
-    if acao == 'inserir':
-        database.inserir_emprestimo(matricula, idlivro)
-        return redirect('/emprestimos')
-    else:
-        return redirect('/emprestimos')
+    database.emprestimoAdicionarMongo(matricula, idlivro)
+    return redirect('/emprestimos')
 
 @bp.route('/emprestimos/devolver/<int:id>', methods=['PUT'])
 def devolver_livro(id):

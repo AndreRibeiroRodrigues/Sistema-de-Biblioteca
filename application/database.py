@@ -10,16 +10,6 @@ def get_connection():
     conn.row_factory = sqlite3.Row
     return conn
 
-
-# Chame a funcão get_db_connection() para obter uma conexão com o banco de dados SQLite.
-# Exemplo de uso:
-# conn = get_db_connection()
-# cursor = conn.cursor()
-# cursor.execute('SELECT * FROM tabela')
-# rows = cursor.fetchall()
-# conn.close()
-# Lembre-se de fechar a conexão quando terminar.
-
 def init_db():
     conn = get_connection()
     cursor = conn.cursor()
@@ -316,7 +306,7 @@ def alunoListarMongo():
     # converter ObjectId para string
     for aluno in alunos:
         aluno["_id"] = str(aluno["_id"])
-
+        
     return alunos
 
 def alunoCadastrarMongo(aluno):
@@ -324,11 +314,18 @@ def alunoCadastrarMongo(aluno):
     
 
 def alunoAtualizarMongo(dado):
-    return
+    mogno_conn.livro.update_one(dado["id"],dado)
 
-# #livros
-# def listar_livros():
-#     return
+#livros
+def livroListarMongo():
+
+    livros = list(mongo_conn.livro.find({}))
+
+    for livro in livros:
+        livro["_id"] = str(livro["_id"])
+
+    return livros
+
 
 def livroAdicionarMongo(titulo, autor, isbn, categoria, ano):
     livro = {
@@ -340,8 +337,9 @@ def livroAdicionarMongo(titulo, autor, isbn, categoria, ano):
     }
     mongo_conn.livro.insert_one(livro) 
 
-# def atualizar_livro(id, titulo, autor, isbn, categoria, ano):
-#     return
+def livroAtualizarMongo(dados):
+    mongo_conn.livro.update_one(dados["id"], dados)
+
 # #emprestimos
 # def get_emprestimos():
 #     return
@@ -350,5 +348,11 @@ def livroAdicionarMongo(titulo, autor, isbn, categoria, ano):
 #     return
 
 
-# def inserir_emprestimo(matricula, idlivro):
-#     return
+def emprestimoAdicionarMongo(matricula, idlivro):
+    dataEmprestimo = datetime.datetime.now().strftime('%Y-%m-%d')
+    emprestimo = {
+        'matricula': matricula,
+        'idlivro': idlivro,
+        'dataEmprestimo': dataEmprestimo
+    }
+    mongo_conn.emprestimo.insert_one(emprestimo)

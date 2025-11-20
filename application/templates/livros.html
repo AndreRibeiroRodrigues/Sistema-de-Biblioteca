@@ -86,14 +86,14 @@
                        <button 
                        class="action-btn"
                        onclick="editarLivro(
-                            '{{ livro.id}}', 
+                            '{{ livro._id}}', 
                             '{{ livro.titulo }}', 
                             '{{ livro.autor }}', 
                             '{{ livro.isbn }}', 
                             '{{ livro.categoria }}', 
                             '{{ livro.ano }}'
                         )"> ✏️ Editar</button>
-                        <button class="action-btn" onclick="excluirLivro('{{livro.id}}')">🗑️ Excluir</button>
+                        <button class="action-btn" onclick="excluirLivro('{{livro._id}}')">🗑️ Excluir</button>
                     </td>
                 </tr>
                 {%endfor%}

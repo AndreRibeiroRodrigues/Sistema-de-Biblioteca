@@ -1,4 +1,4 @@
-function editarLivro(id, titulo, autor, isbn, categoria, ano) {
+function editarLivro(id,matricula, titulo, autor, isbn, categoria, ano) {
   document.getElementById("edit-id").value = id;
   document.getElementById("edit-titulo").value = titulo;
   document.getElementById("edit-autor").value = autor;
@@ -30,7 +30,6 @@ async function salvarEdicao() {
     isbn: document.getElementById("edit-isbn").value,
     categoria: document.getElementById("edit-categoria").value,
     ano: document.getElementById("edit-ano").value,
-    // status: document.getElementById("edit-status").value
   };
 
   const response = await fetch(`/livros/editar/${livro.id}`, {
