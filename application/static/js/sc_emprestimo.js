@@ -3,28 +3,18 @@ async function devolverEmprestimo(id) {
 
   try {
     const response = await fetch(`/emprestimos/devolver/${id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ id: id }),
-
+      method: "delete",
     });
 
     const result = await response.json();
 
     if (response.ok) {
-      alert(result.message || "Livro devolvido com sucesso!");
-
-      // Atualiza a linha visualmente (opcional)
-      const linha = document.getElementById(`emprestimo-${id}`);
-      if (linha && linha.cells && linha.cells.length >= 5) {
-        const hoje = new Date().toISOString().slice(0, 10);
-        linha.cells[4].textContent = hoje;
-      }
+      alert(result.message);
+      location.reload();
     } else {
       alert("Erro ao devolver: " + result.message);
     }
+    
   } catch (erro) {
     console.error(erro);
     alert("Erro ao conectar com o servidor.");

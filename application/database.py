@@ -360,18 +360,76 @@ def livroDelertarMongo(id):
     mongo_conn.livro.delete_one({"_id": ObjectId(id)})
 
 # #emprestimos
-# def emprestimoListarMongo():
-#     return
+def emprestimoListarMongo():
+    pipeline = [
+        # Converte os IDs string para ObjectId
+        {
+            "$addFields": {
+                "idalunoObj": { "$toObjectId": "$idaluno" },
+                "idlivroObj": { "$toObjectId": "$idlivro" }
+            }
+        },
+        # JOIN com aluno
+        {
+            "$lookup": {
+                "from": "aluno",
+                "localField": "idalunoObj",
+                "foreignField": "_id",
+                "as": "aluno"
+            }
+        },
+        { "$unwind": "$aluno" },
 
-# def emprestimoDevolverLivro(id):
-#     return
+        # JOIN com livro
+        {
+            "$lookup": {
+                "from": "livro",
+                "localField": "idlivroObj",
+                "foreignField": "_id",
+                "as": "livro"
+            }
+        },
+        { "$unwind": "$livro" },
+
+        # Seleciona os campos que vão pra tela
+        {
+            "$project": {
+                "dataEmprestimo": 1,
+                # se não tiver dataDevolucao, vira string vazia
+                "dataDevolucao": {
+                    "$ifNull": ["$dataDevolucao", ""]
+                },
+                "Aluno": "$aluno.nome",
+                "Livro": "$livro.titulo"
+            }
+        }
+    ]
+
+    emprestimos = list(mongo_conn.emprestimo.aggregate(pipeline))
+
+    # transforma o _id em string pra não dar problema no template
+    for e in emprestimos:
+        e["_id"] = str(e["_id"])
+
+    return emprestimos
+
+def emprestimoDevolverLivro(id):
+    dataDevolucao = datetime.datetime.now().strftime('%Y-%m-%d')
+    mongo_conn.emprestimo.update_one(
+        {"_id": ObjectId(id)},
+        {"$set": {
+            "dataDevolucao": dataDevolucao
+            }
+        }
+    )
 
 
 def emprestimoAdicionarMongo(matricula, idlivro):
     dataEmprestimo = datetime.datetime.now().strftime('%Y-%m-%d')
     emprestimo = {
-        'matricula': matricula,
+        'idaluno': matricula,
         'idlivro': idlivro,
         'dataEmprestimo': dataEmprestimo
     }
     mongo_conn.emprestimo.insert_one(emprestimo)
+

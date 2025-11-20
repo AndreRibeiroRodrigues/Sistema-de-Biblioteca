@@ -180,8 +180,9 @@ function fecharModal() {
       const resultado = await resposta.json();
       alert(resultado.mensagem);
 
+      location.reload();
       // 🔹 Atualiza visualmente a linha da tabela (sem recarregar)
-      atualizarTabela(aluno);
+      // atualizarTabela(aluno);
       fecharModal();
     } catch (erro) {
       console.error('Erro ao atualizar:', erro);

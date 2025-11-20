@@ -33,7 +33,7 @@
                     <select name="aluno">
                         <option value="">Selecione um aluno</option>
                         {%for aluno in alunos%}
-                        <option value="{{aluno.matricula}}">{{aluno.nome}} - {{aluno.matricula}}</option>
+                        <option value="{{aluno._id}}">{{aluno.nome}} - {{aluno.matricula}}</option>
                         {%endfor%}
                     </select>
                 </div>
@@ -55,7 +55,6 @@
             <table id="tabelaEmprestimos">
                 <thead>
                     <tr>
-                        <th>ID</th>
                         <th>Aluno</th>
                         <th>Livro</th>
                         <th>Data Empréstimo</th>
@@ -66,7 +65,6 @@
                 <tbody>
                     {%for emprestimo in emprestimos%}
                         <tr id="emprestimo-{{ emprestimo.id_emprestimo }}">
-                            <td>{{emprestimo.id_emprestimo}}</td>
                             <td>{{emprestimo.Aluno}}</td>
                             <td>{{emprestimo.Livro}}</td>
                             <td>{{emprestimo.dataEmprestimo}}</td>
@@ -76,7 +74,7 @@
                             <td>{{emprestimo.dataDevolucao}}</td>
                             {%endif%}
                             <td>
-                                <button type="button" class="action-btn" onclick="devolverEmprestimo('{{ emprestimo.id_emprestimo }}')">✓ Devolver</button>
+                                <button type="button" class="action-btn" onclick="devolverEmprestimo('{{ emprestimo._id }}')">✓ Devolver</button>
                             </td>
                         </tr>
                     {%endfor%}

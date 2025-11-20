@@ -99,20 +99,26 @@ def excluir_livro(id):
 def emprestimos():
     alunos = database.alunoListarMongo()
     livros = database.livroListarMongo()
-    emprestimos = database.get_emprestimos()
+    emprestimos = database.emprestimoListarMongo()
 
     return render_template('emprestimos.html', emprestimos=emprestimos,livros=livros, alunos=alunos)
 
+@bp.route('/emprestimos/listar', methods=['GET'])
+def emprestimos_listar():
+    emprestimos = database.emprestimoListarMongo()
+
+    return jsonify(emprestimos)
+
 @bp.route('/emprestimos/adicionar', methods=['POST'])
 def post_emprestimo():
-    matricula = request.form.get('aluno')
+    idAluno = request.form.get('aluno')
     idlivro = request.form.get('livro')
-    database.emprestimoAdicionarMongo(matricula, idlivro)
+    database.emprestimoAdicionarMongo(idAluno, idlivro)
     return redirect('/emprestimos')
 
-@bp.route('/emprestimos/devolver/<int:id>', methods=['PUT'])
+@bp.route('/emprestimos/devolver/<string:id>', methods=['DELETE'])
 def devolver_livro(id):
-    database.devolver_livro(id)
+    database.emprestimoDevolverLivro(id)
     return jsonify({"message": "Livro devolvido com sucesso!"})
 
 
