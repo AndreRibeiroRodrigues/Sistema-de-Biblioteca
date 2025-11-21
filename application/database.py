@@ -3,6 +3,9 @@ import os
 import datetime
 from pymongo import MongoClient
 from bson import ObjectId
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 def get_connection():
@@ -269,7 +272,7 @@ emprestimo_validator = {
 
 
 def get_mongo_connection():
-    uri = "mongodb+srv://gamesandre77_db_user:Um.emel2@rayjirmongodb.k4qsfcn.mongodb.net/?appName=RayjirMongodb"
+    uri = os.getenv("MONGODB_URI")
     client = MongoClient(uri)
     db = client['biblioteca']
     print('conectado')
@@ -433,3 +436,12 @@ def emprestimoAdicionarMongo(matricula, idlivro):
     }
     mongo_conn.emprestimo.insert_one(emprestimo)
 
+# Esta função irá se conectar ao MongoDB e contar os documentos nas coleções aluno,
+# livro e emprestimo.
+def get_total_counts():
+    counts = {
+        'alunos': mongo_conn.aluno.count_documents({}),
+        'livros': mongo_conn.livro.count_documents({}),
+        'emprestimos': mongo_conn.emprestimo.count_documents({})
+    }
+    return counts
