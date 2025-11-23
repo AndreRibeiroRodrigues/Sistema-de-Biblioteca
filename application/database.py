@@ -3,6 +3,9 @@ import os
 import datetime
 from pymongo import MongoClient
 from bson import ObjectId
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 def get_connection():
@@ -433,9 +436,12 @@ def emprestimoAdicionarMongo(matricula, idlivro):
     }
     mongo_conn.emprestimo.insert_one(emprestimo)
 
-def indexCountMongo():
-    aluno_count = mongo_conn.aluno.count_documents({})
-    livro_count = mongo_conn.livro.count_documents({})
-    emprestimo_count = mongo_conn.emprestimo.count_documents({})
-
-    return aluno_count, livro_count, emprestimo_count
+# Esta função irá se conectar ao MongoDB e contar os documentos nas coleções aluno,
+# livro e emprestimo.
+def get_total_counts():
+    counts = {
+        'alunos': mongo_conn.aluno.count_documents({}),
+        'livros': mongo_conn.livro.count_documents({}),
+        'emprestimos': mongo_conn.emprestimo.count_documents({})
+    }
+    return counts

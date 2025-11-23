@@ -7,9 +7,9 @@ bp = Blueprint('main', __name__)
 @bp.route('/')
 @bp.route('/apresentacao')
 def index():
-    alunos, livros, emprestimos = database.indexCountMongo()
+    counts = database.get_total_counts()
 
-    return render_template('index.html', livros=livros, alunos=alunos, emprestimos=emprestimos)
+    return render_template('index.html', livros=counts['livros'], alunos=counts['alunos'], emprestimos=counts['emprestimos'])
 
 #aluno
 @bp.route('/aluno')
