@@ -269,8 +269,8 @@ emprestimo_validator = {
 
 
 def get_mongo_connection():
-    uri = "mongodb+srv://gamesandre77_db_user:Um.emel2@rayjirmongodb.k4qsfcn.mongodb.net/?appName=RayjirMongodb"
-    client = MongoClient(uri)
+    # crie seu arquivo .env com a variável MONGO_URI
+    client = MongoClient(os.getenv("MONGO_URI"))
     db = client['biblioteca']
     print('conectado')
     return db
@@ -433,3 +433,9 @@ def emprestimoAdicionarMongo(matricula, idlivro):
     }
     mongo_conn.emprestimo.insert_one(emprestimo)
 
+def indexCountMongo():
+    aluno_count = mongo_conn.aluno.count_documents({})
+    livro_count = mongo_conn.livro.count_documents({})
+    emprestimo_count = mongo_conn.emprestimo.count_documents({})
+
+    return aluno_count, livro_count, emprestimo_count
