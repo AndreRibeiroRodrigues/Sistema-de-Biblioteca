@@ -1,26 +1,93 @@
-ojeto Biblioteca
 
-Este projeto é uma aplicação em Python com integração a banco de dados SQL para gerenciamento de uma biblioteca.
+# Sistema de Biblioteca
 
-## Diagrama do Banco de Dados
+Uma aplicação simples em Python para gerenciar empréstimos, alunos e livros com persistência em banco SQL.
 
-Abaixo está o diagrama do banco de dados utilizado neste projeto:
+## Visão geral
 
-![Diagrama da Biblioteca](https://github.com/AndreRibeiroRodrigues/Trabalho-banco-de-dados/blob/main/Biblioteca.png).
+Este projeto fornece uma interface web leve para cadastrar alunos, livros e controlar empréstimos. Foi desenvolvido como um exercício/mini-projeto e inclui scripts para criar a base de dados e popular dados de exemplo.
 
-## Tecnologias Utilizadas
+## Recursos
 
-- Python
-- SQL
-- HTML
-- CSS
-- JavaScript
+- Cadastro e listagem de alunos
+- Cadastro e listagem de livros
+- Registro de empréstimos e devoluções
+- Páginas HTML com estilos e scripts básicos
 
-## Como executar
+## Tecnologias
 
-1. Clone este repositório.
-2. Crie uma venv para intalar as dependencias executando os segintes comandos
-2.a. python3 -m venv venv
-2.b. venv/script/activate
-3. Execute o script principal (run.py)
-4. depois que o programa terminar de executar ele continuara rodando em segundo plano ai é so acessar o endereco de ip informado no cmd
+- Python 3
+- SQLite (via scripts SQL locais)
+- HTML, CSS, JavaScript
+
+## Requisitos
+
+- Python 3.8+ instalado
+- `pip` para instalar dependências
+
+## Instalação rápida
+
+1. Clone o repositório:
+
+```bash
+git clone https://github.com/AndreRibeiroRodrigues/Sistema-de-Biblioteca.git
+cd Sistema-de-Biblioteca
+```
+
+2. Crie e ative um ambiente virtual:
+
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
+
+3. Instale dependências:
+
+```bash
+pip install -r requirements.txt
+```
+
+## Inicializando o banco de dados
+
+O projeto inclui o arquivo `schema.sql` com a estrutura do banco. Para criar o banco e as tabelas, você pode executar o script Python que usa esse esquema ou rodar manualmente o SQL no seu cliente SQLite.
+
+- Executar script de criação (exemplo):
+
+```bash
+python Inserir_Dados.py
+```
+
+O script `Inserir_Dados.py` insere dados de exemplo para facilitar testes.
+
+## Executando a aplicação
+
+Você pode rodar a aplicação diretamente com o script principal `run.py` ou usar o script `devserver.sh` se preferir um wrapper de execução.
+
+```bash
+python run.py
+# ou
+./devserver.sh
+```
+
+Após iniciar, abra o endereço exibido no terminal (por exemplo `http://127.0.0.1:5000`) para acessar a interface web.
+
+## Estrutura do projeto
+
+- `application/` : código da aplicação (rotas, banco, templates, estáticos)
+- `Inserir_Dados.py` : script para popular dados de exemplo
+- `schema.sql` : definição das tabelas do banco
+- `run.py` : ponto de entrada da aplicação
+- `devserver.sh` : script auxiliar para desenvolvimento
+
+## Contribuição
+
+- Abra uma issue descrevendo a melhoria desejada
+- Fork e envie um pull request com mudanças claras
+
+## Contato
+
+Para dúvidas ou sugestões, abra uma issue no repositório.
+
+## Licença
+
+Este projeto não possui uma licença especificada — adicione um arquivo `LICENSE` se desejar torná-lo open-source.
