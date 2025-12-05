@@ -26,7 +26,7 @@
 <div class="container">
     <h2 class="section-title">Gerenciamento de Acervo</h2>
 
-    <form class="controls" action="/post_livro" method="POST">
+    <form class="controls" action="/livro/adicionar" method="POST">
         <div class="controls-row">
             <div class="form-group">
                 <label for="titulo">Título do Livro</label>
@@ -64,7 +64,6 @@
         <table id="tabelaLivros">
             <thead>
             <tr>
-                <th>ID</th>
                 <th>Título</th>
                 <th>Autor</th>
                 <th>ISBN</th>
@@ -76,7 +75,7 @@
             <tbody>
                 {%for livro in livros%}
                 <tr id="livro-{{livro.id}}">
-                    <td>{{livro.id}}</td>
+                    
                     <td>{{livro.titulo}}</td>
                     <td>{{livro.autor}}</td>
                     <td>{{livro.isbn}}</td>
@@ -86,14 +85,14 @@
                        <button 
                        class="action-btn"
                        onclick="editarLivro(
-                            '{{ livro.id}}', 
+                            '{{ livro._id}}', 
                             '{{ livro.titulo }}', 
                             '{{ livro.autor }}', 
                             '{{ livro.isbn }}', 
                             '{{ livro.categoria }}', 
                             '{{ livro.ano }}'
                         )"> ✏️ Editar</button>
-                        <button class="action-btn" onclick="excluirLivro('{{livro.id}}')">🗑️ Excluir</button>
+                        <button class="action-btn" onclick="excluirLivro('{{livro._id}}')">🗑️ Excluir</button>
                     </td>
                 </tr>
                 {%endfor%}
@@ -112,7 +111,7 @@
     <h2>Editar Livro</h2>
 
     <form id="formEditarLivro">
-      <input type="hidden" id="edit-id">
+      <input type="text" id="edit-id" readonly>
 
       <label for="edit-titulo">Título:</label>
       <input type="text" id="edit-titulo" required>

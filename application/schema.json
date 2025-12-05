@@ -1,0 +1,136 @@
+{
+    "aluno_validator": {
+      "validator": {
+        "$jsonSchema": {
+          "bsonType": "object",
+          "title": "Aluno Document Validation",
+          "required": [
+            "MATRICULA",
+            "NOME",
+            "TURMA",
+            "EMAIL",
+            "TELEFONE",
+            "DATANASCIMENTO"
+          ],
+          "properties": {
+            "MATRICULA": {
+              "bsonType": "int",
+              "minimum": 1,
+              "description": "'MATRICULA' deve ser um inteiro positivo e é obrigatória"
+            },
+            "NOME": {
+              "bsonType": "string",
+              "description": "'NOME' deve ser string e é obrigatório"
+            },
+            "TURMA": {
+              "bsonType": "string",
+              "description": "'TURMA' deve ser string e é obrigatório"
+            },
+            "EMAIL": {
+              "bsonType": "string",
+              "pattern": "^.+@.+$",
+              "description": "'EMAIL' deve ser um e-mail válido e é obrigatório"
+            },
+            "TELEFONE": {
+              "bsonType": "string",
+              "description": "'TELEFONE' deve ser string e é obrigatório"
+            },
+            "DATANASCIMENTO": {
+              "bsonType": "date",
+              "description": "'DATANASCIMENTO' deve ser uma data (MongoDB Date) e é obrigatório"
+            }
+          }
+        }
+      }
+    },
+  
+    "livro_validator": {
+      "validator": {
+        "$jsonSchema": {
+          "bsonType": "object",
+          "title": "Livro Document Validation",
+          "required": [
+            "ID",
+            "TITULO",
+            "AUTOR",
+            "ISBN",
+            "CATEGORIA",
+            "ANO"
+          ],
+          "properties": {
+            "ID": {
+              "bsonType": "int",
+              "minimum": 1,
+              "description": "'ID' deve ser um inteiro positivo e é obrigatório"
+            },
+            "TITULO": {
+              "bsonType": "string",
+              "description": "'TITULO' deve ser string e é obrigatório"
+            },
+            "AUTOR": {
+              "bsonType": "string",
+              "description": "'AUTOR' deve ser string e é obrigatório"
+            },
+            "ISBN": {
+              "bsonType": "string",
+              "description": "'ISBN' deve ser string e é obrigatório"
+            },
+            "CATEGORIA": {
+              "bsonType": "string",
+              "description": "'CATEGORIA' deve ser string e é obrigatório"
+            },
+            "ANO": {
+              "bsonType": "int",
+              "minimum": 0,
+              "description": "'ANO' deve ser inteiro não negativo e é obrigatório"
+            }
+          }
+        }
+      }
+    },
+  
+    "emprestimo_validator": {
+      "validator": {
+        "$jsonSchema": {
+          "bsonType": "object",
+          "title": "Emprestimo Document Validation",
+          "required": [
+            "ID",
+            "ID_ALUNO",
+            "ID_LIVRO",
+            "DATAEMPRESTIMO"
+          ],
+          "properties": {
+            "ID": {
+              "bsonType": "int",
+              "minimum": 1,
+              "description": "'ID' deve ser um inteiro positivo e é obrigatório"
+            },
+            "ID_ALUNO": {
+              "bsonType": "int",
+              "minimum": 1,
+              "description": "'ID_ALUNO' deve ser inteiro positivo e é obrigatório (ref. ALUNOS.MATRICULA)"
+            },
+            "ID_LIVRO": {
+              "bsonType": "int",
+              "minimum": 1,
+              "description": "'ID_LIVRO' deve ser inteiro positivo e é obrigatório (ref. LIVROS.ID)"
+            },
+            "DATAEMPRESTIMO": {
+              "bsonType": "date",
+              "description": "'DATAEMPRESTIMO' deve ser uma data (MongoDB Date) e é obrigatória"
+            },
+            "DATADEVOLUCAO": {
+              "bsonType": ["date", "null"],
+              "description": "'DATADEVOLUCAO' pode ser data ou null"
+            },
+            "STATUS": {
+              "bsonType": ["string", "null"],
+              "description": "'STATUS' é opcional; se existir deve ser string"
+            }
+          }
+        }
+      }
+    }
+  }
+  
